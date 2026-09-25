@@ -1,0 +1,6 @@
+{
+  "name": "Digital Electronics E-Learning Platform",
+  "description": "Digital Electronics web platform combining searchable PDF notes, 228 YouTube video lectures, interactive circuit simulator, topic quizzes, 5-year JNTUH PYQs, and reference textbooks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
