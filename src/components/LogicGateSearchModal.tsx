@@ -7,8 +7,10 @@ import {
   ExternalLink,
   Zap,
   Sparkles,
-  Info
+  Info,
+  Image as ImageIcon
 } from 'lucide-react';
+import { LogicGateSymbol, SupportedGate } from './LogicGateSymbol';
 
 export const GATE_KEYS = ['AND', 'OR', 'NOT', 'BUFFER', 'NAND', 'NOR', 'XOR', 'XNOR'] as const;
 export type GateKey = typeof GATE_KEYS[number];
@@ -46,6 +48,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
 }) => {
   const [selectedGate, setSelectedGate] = useState<GateKey>(matchedGate || 'AND');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewStyle, setViewStyle] = useState<'diagram' | 'chart'>('diagram');
 
   const gateDetails: Record<GateKey, {
     title: string;
@@ -91,6 +94,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
     BUFFER: {
       title: 'BUFFER',
       expression: 'Z = A',
+      circuitId: 'gate-buffer',
       description: 'Passes logic state unchanged; provides electrical signal amplification.',
       table: [
         { a: 0, out: 0 },
@@ -206,31 +210,73 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
       {/* Two Column Layout: Left Image Preview, Right Truth Table & Details */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
         {/* Left: Diagram & Image Card */}
-        <div
-          onClick={() => setIsModalOpen(true)}
-          className="md:col-span-7 bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer group hover:border-sky-400 hover:shadow-md transition-all relative overflow-hidden"
-          title="Click to view full chart image in high resolution"
-        >
+        <div className="md:col-span-7 bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center hover:border-sky-400 transition-all relative overflow-hidden">
           <div className="w-full flex items-center justify-between text-[11px] font-mono text-slate-500 mb-2">
             <span className="font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-100">
               {current.title}
             </span>
-            <span className="text-slate-400 flex items-center gap-1 group-hover:text-sky-600">
-              <Maximize2 className="w-3 h-3" /> Click to enlarge chart
-            </span>
+
+            {/* Toggle between vector diagram and chart image */}
+            <div className="flex items-center bg-slate-200 rounded-lg p-0.5 text-[10px]">
+              <button
+                type="button"
+                onClick={() => setViewStyle('diagram')}
+                className={`px-2 py-0.5 rounded-md font-semibold transition-colors cursor-pointer ${
+                  viewStyle === 'diagram' ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Gate Symbol
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewStyle('chart')}
+                className={`px-2 py-0.5 rounded-md font-semibold transition-colors cursor-pointer ${
+                  viewStyle === 'chart' ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Full Chart
+              </button>
+            </div>
           </div>
 
-          <div className="w-full max-h-56 overflow-hidden rounded-lg bg-white border border-slate-200 p-2 flex items-center justify-center">
-            <img
-              src="/logic-gates-chart.jpg"
-              alt="Symbols and Truth Tables of Common Logic Gates"
-              className="max-h-52 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
+          {viewStyle === 'diagram' ? (
+            <div className="w-full py-2 bg-slate-900 rounded-lg flex flex-col items-center justify-center border border-slate-800 shadow-inner px-2">
+              <LogicGateSymbol
+                gate={selectedGate}
+                inputA={current.table[current.table.length - 1].a}
+                inputB={current.table[current.table.length - 1].b ?? 0}
+                output={current.table[current.table.length - 1].out}
+                showLabels={true}
+                className="w-full max-w-[280px] h-auto"
+              />
+              <span className="text-[10px] text-sky-300 font-mono mt-1">
+                IEEE Standard Symbol with Dynamic Pin Signals
+              </span>
+            </div>
+          ) : (
+            <div
+              onClick={() => setIsModalOpen(true)}
+              className="w-full max-h-56 overflow-hidden rounded-lg bg-white border border-slate-200 p-2 flex items-center justify-center cursor-pointer group"
+              title="Click to enlarge full reference sheet"
+            >
+              <img
+                src="/logic-gates-chart.jpg"
+                alt="Symbols and Truth Tables of Common Logic Gates"
+                className="max-h-52 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+          )}
 
-          <span className="text-[10px] text-slate-400 mt-2 text-center block">
-            Official Logic Gates Diagram: AND, OR, NOT, BUFFER, NAND, NOR, XOR, XNOR
-          </span>
+          <div className="w-full flex items-center justify-between text-[10px] text-slate-500 mt-2 px-1">
+            <span>Official Logic Gates Reference Sheet</span>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="text-sky-600 hover:text-sky-800 font-semibold flex items-center gap-1 cursor-pointer"
+            >
+              <Maximize2 className="w-3 h-3" /> Enlarge Chart
+            </button>
+          </div>
         </div>
 
         {/* Right: Truth Table and Information */}

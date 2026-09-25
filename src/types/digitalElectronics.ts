@@ -32,6 +32,14 @@ export interface NoteSection {
   videoSequenceNos?: number[];
 }
 
+export interface BooleanTransferFunction {
+  standardForm: string;
+  expandedForm?: string;
+  deMorganForm?: string;
+  characteristicEquation?: string;
+  wordDescription: string;
+}
+
 export interface CircuitDefinition {
   id: string;
   name: string;
@@ -39,6 +47,7 @@ export interface CircuitDefinition {
   unitId: UnitId;
   description: string;
   booleanExpression?: string;
+  booleanDetails?: BooleanTransferFunction;
   inputs: { name: string; label: string; defaultVal: 0 | 1 }[];
   outputs: { name: string; label: string }[];
   truthTable: {

@@ -104,10 +104,23 @@ export const Navbar: React.FC<NavbarProps> = ({ activeView, setActiveView }) => 
 
           <button
             onClick={() => setActiveView('simulator')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 rounded-lg transition-colors whitespace-nowrap shadow-xs cursor-pointer"
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white rounded-lg transition-colors whitespace-nowrap shadow-xs cursor-pointer ${
+              activeView === 'simulator'
+                ? 'bg-sky-700/80 border border-sky-400'
+                : 'bg-sky-600 hover:bg-sky-500'
+            }`}
           >
-            <Zap className="w-3.5 h-3.5 fill-current" />
-            <span className="hidden sm:inline">Open Simulator</span>
+            {activeView === 'simulator' ? (
+              <>
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="hidden sm:inline">Simulator Active</span>
+              </>
+            ) : (
+              <>
+                <Zap className="w-3.5 h-3.5 fill-current" />
+                <span className="hidden sm:inline">Open Simulator</span>
+              </>
+            )}
           </button>
 
           {/* Mobile Menu Button */}
