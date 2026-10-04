@@ -8,17 +8,17 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Basic logic gate producing High (1) only when all inputs A and B are simultaneously High (1).',
-    booleanExpression: 'Y = A · B',
+    booleanExpression: 'Z = A · B',
     booleanDetails: {
-      standardForm: 'Y = A · B',
-      expandedForm: 'Z = A · B (also written Y = AB)',
-      wordDescription: 'Output Y is HIGH (1) if and only if both input A = 1 AND input B = 1. If any input is 0, the output is 0.'
+      standardForm: 'Z = A · B  (or Y = AB)',
+      expandedForm: 'Z = A · B',
+      wordDescription: 'Output Z is HIGH (1) if and only if both input A = 1 AND input B = 1. If any input is 0, the output Z = 0.'
     },
     inputs: [
       { name: 'A', label: 'Input A', defaultVal: 0 },
       { name: 'B', label: 'Input B', defaultVal: 0 }
     ],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z' }],
     truthTable: [
       { inputs: [0, 0], outputs: [0], state: 'Both LOW (0) -> Output 0' },
       { inputs: [0, 1], outputs: [0], state: 'A is LOW (0) -> Output 0' },
@@ -39,17 +39,17 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Basic logic gate producing High (1) when at least one input (A or B) is High (1).',
-    booleanExpression: 'Y = A + B',
+    booleanExpression: 'Z = A + B',
     booleanDetails: {
-      standardForm: 'Y = A + B',
+      standardForm: 'Z = A + B  (or Y = A + B)',
       expandedForm: 'Z = A + B',
-      wordDescription: 'Output Y is HIGH (1) if at least one input is HIGH (1). The output is LOW (0) only when both inputs are 0.'
+      wordDescription: 'Output Z is HIGH (1) if at least one input is HIGH (1). The output Z is LOW (0) strictly when both inputs A = 0 and B = 0.'
     },
     inputs: [
       { name: 'A', label: 'Input A', defaultVal: 0 },
       { name: 'B', label: 'Input B', defaultVal: 0 }
     ],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z' }],
     truthTable: [
       { inputs: [0, 0], outputs: [0], state: 'Both LOW (0) -> Output 0' },
       { inputs: [0, 1], outputs: [1], state: 'B is HIGH (1) -> Output 1' },
@@ -70,14 +70,14 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Inverts the binary state of the single input (0 becomes 1, 1 becomes 0).',
-    booleanExpression: "Y = A'  (or Y = Ā)",
+    booleanExpression: "Z = Ā  (or Z = A')",
     booleanDetails: {
-      standardForm: "Y = A'  (or Y = Ā)",
-      expandedForm: "Z = NOT(A) = A'",
-      wordDescription: 'Complements the input binary state: when input A = 0, output Y = 1; when input A = 1, output Y = 0.'
+      standardForm: "Z = Ā  [also written Z = A']",
+      expandedForm: "Z = NOT(A) = Ā",
+      wordDescription: 'Complements the input binary state: when input A = 0, output Z = 1; when input A = 1, output Z = 0.'
     },
     inputs: [{ name: 'A', label: 'Input A', defaultVal: 0 }],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z (Ā)' }],
     truthTable: [
       { inputs: [0], outputs: [1], state: 'Input 0 -> Inverted to 1' },
       { inputs: [1], outputs: [0], state: 'Input 1 -> Inverted to 0' }
@@ -95,15 +95,15 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     name: 'BUFFER Gate',
     category: 'Gates',
     unitId: 'unit-1',
-    description: 'Passes logic state unchanged (Y = A) while restoring signal amplitude and driving current.',
-    booleanExpression: 'Y = A',
+    description: 'Passes logic state unchanged (Z = A) while restoring signal amplitude and driving current.',
+    booleanExpression: 'Z = A',
     booleanDetails: {
-      standardForm: 'Y = A',
-      expandedForm: 'Z = A (Non-Inverting Buffer)',
-      wordDescription: 'Passes the input logic state to output unchanged (0→0, 1→1) with current amplification and signal restoration.'
+      standardForm: 'Z = A  (Non-Inverting Transmission)',
+      expandedForm: 'Z = A',
+      wordDescription: 'Direct identity transfer function: passes the input logic state to output unchanged (0→0, 1→1) with current amplification.'
     },
     inputs: [{ name: 'A', label: 'Input A', defaultVal: 1 }],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z (A)' }],
     truthTable: [
       { inputs: [0], outputs: [0], state: 'Input 0 -> Output 0' },
       { inputs: [1], outputs: [1], state: 'Input 1 -> Output 1' }
@@ -122,17 +122,17 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Universal logic building block. Outputs 0 only when both inputs A and B are 1.',
-    booleanExpression: "Y = (A · B)'",
+    booleanExpression: "Z = (A · B)̄  [also written Z = (A · B)']",
     booleanDetails: {
-      standardForm: "Y = (A · B)'  (or Y = (A · B)̄)",
-      deMorganForm: "Y = A' + B'  (De Morgan's First Theorem)",
-      wordDescription: 'Inverted AND function: Output Y is LOW (0) strictly when both inputs A and B are HIGH (1); otherwise output is 1.'
+      standardForm: "Z = (A · B)̄  [also written Z = (A · B)' or Z = (AB)̄]",
+      deMorganForm: "Z = Ā + B̄  (De Morgan's First Law: (A · B)̄ = Ā + B̄)",
+      wordDescription: 'Inverted AND function: Output Z is LOW (0) strictly when both inputs A and B are HIGH (1); for all other input combinations, output Z = 1.'
     },
     inputs: [
       { name: 'A', label: 'Input A', defaultVal: 1 },
       { name: 'B', label: 'Input B', defaultVal: 1 }
     ],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z' }],
     truthTable: [
       { inputs: [0, 0], outputs: [1], state: 'Both LOW (0) -> Output 1' },
       { inputs: [0, 1], outputs: [1], state: 'A is LOW (0) -> Output 1' },
@@ -153,17 +153,17 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Universal gate producing High (1) strictly when all inputs are Low (0).',
-    booleanExpression: "Y = (A + B)'",
+    booleanExpression: "Z = (A + B)̄  [also written Z = (A + B)']",
     booleanDetails: {
-      standardForm: "Y = (A + B)'  (or Y = (A + B)̄)",
-      deMorganForm: "Y = A' · B'  (De Morgan's Second Theorem)",
-      wordDescription: 'Inverted OR function: Output Y is HIGH (1) strictly when both inputs A and B are LOW (0); otherwise output is 0.'
+      standardForm: "Z = (A + B)̄  [also written Z = (A + B)']",
+      deMorganForm: "Z = Ā · B̄  (De Morgan's Second Law: (A + B)̄ = Ā · B̄)",
+      wordDescription: 'Inverted OR function: Output Z is HIGH (1) strictly when both inputs A and B are LOW (0); if any input is 1, output Z = 0.'
     },
     inputs: [
       { name: 'A', label: 'Input A', defaultVal: 0 },
       { name: 'B', label: 'Input B', defaultVal: 0 }
     ],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z' }],
     truthTable: [
       { inputs: [0, 0], outputs: [1], state: 'Both LOW (0) -> Output 1' },
       { inputs: [0, 1], outputs: [0], state: 'B is HIGH (1) -> Output 0' },
@@ -184,17 +184,17 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Outputs 1 when inputs are distinct (odd parity / controlled inverter).',
-    booleanExpression: "Y = A ⊕ B = A · B' + A' · B",
+    booleanExpression: "Z = A ⊕ B = ĀB + AB̄",
     booleanDetails: {
-      standardForm: 'Y = A ⊕ B',
-      expandedForm: "Y = A · B' + A' · B  (Sum of Products)",
-      wordDescription: 'Exclusive-OR function: Output Y is HIGH (1) when inputs are different (odd parity). If inputs are equal, output is 0.'
+      standardForm: 'Z = A ⊕ B',
+      expandedForm: "Z = ĀB + AB̄  [also written Z = A'B + AB']",
+      wordDescription: 'Exclusive-OR function (Odd Parity): Output Z is HIGH (1) when inputs A and B are different. When inputs are equal, output Z = 0.'
     },
     inputs: [
       { name: 'A', label: 'Input A', defaultVal: 1 },
       { name: 'B', label: 'Input B', defaultVal: 0 }
     ],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z' }],
     truthTable: [
       { inputs: [0, 0], outputs: [0], state: 'Identical inputs (0,0) -> Output 0' },
       { inputs: [0, 1], outputs: [1], state: 'Different inputs (0,1) -> Output 1' },
@@ -215,17 +215,17 @@ export const CIRCUITS_DATA: CircuitDefinition[] = [
     category: 'Gates',
     unitId: 'unit-1',
     description: 'Outputs 1 when both inputs are identical (coincidence detector).',
-    booleanExpression: "Y = (A ⊕ B)' = A ⊙ B = A · B + A' · B'",
+    booleanExpression: "Z = (A ⊕ B)̄ = A ⊙ B = AB + ĀB̄",
     booleanDetails: {
-      standardForm: "Y = A ⊙ B = (A ⊕ B)'",
-      expandedForm: "Y = A · B + A' · B'  (Sum of Products)",
-      wordDescription: 'Equivalence / Coincidence function: Output Y is HIGH (1) when both inputs are identical (both 0 or both 1).'
+      standardForm: "Z = (A ⊕ B)̄ = A ⊙ B",
+      expandedForm: "Z = AB + ĀB̄  [also written Z = AB + A'B']",
+      wordDescription: 'Equivalence / Coincidence function (Even Parity): Output Z is HIGH (1) when inputs A and B are identical (both 0 or both 1). When inputs differ, output Z = 0.'
     },
     inputs: [
       { name: 'A', label: 'Input A', defaultVal: 0 },
       { name: 'B', label: 'Input B', defaultVal: 0 }
     ],
-    outputs: [{ name: 'Y', label: 'Output Y' }],
+    outputs: [{ name: 'Y', label: 'Output Z' }],
     truthTable: [
       { inputs: [0, 0], outputs: [1], state: 'Identical inputs (0,0) -> Output 1' },
       { inputs: [0, 1], outputs: [0], state: 'Different inputs (0,1) -> Output 0' },

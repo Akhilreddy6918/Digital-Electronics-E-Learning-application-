@@ -8,6 +8,7 @@ import { YouTubeVideoLibrary } from './components/YouTubeVideoLibrary';
 import { QuizModule } from './components/QuizModule';
 import { PyqModule } from './components/PyqModule';
 import { ReferenceBooksModule } from './components/ReferenceBooksModule';
+import { ChartSheetModal, ChartType } from './components/ChartSheetModal';
 
 export default function App() {
   const [activeView, setActiveView] = useState<'dashboard' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books'>('dashboard');
@@ -15,6 +16,8 @@ export default function App() {
   const [selectedNotesSectionId, setSelectedNotesSectionId] = useState<string>('sec-u1-1');
   const [notesSearchQuery, setNotesSearchQuery] = useState<string>('');
   const [selectedQuizUnit, setSelectedQuizUnit] = useState<UnitId | undefined>(undefined);
+  const [isChartModalOpen, setIsChartModalOpen] = useState<boolean>(false);
+  const [chartModalInitial, setChartModalInitial] = useState<ChartType>('flipflops');
 
   // Global search handler from Dashboard
   const handleGlobalSearch = (query: string) => {
@@ -50,7 +53,14 @@ export default function App() {
   return (
     <div className={`min-h-screen flex flex-col font-sans selection:bg-sky-500 selection:text-white ${isDarkCanvas ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
       {/* Top Bar Navigation */}
-      <Navbar activeView={activeView} setActiveView={setActiveView} />
+      <Navbar
+        activeView={activeView}
+        setActiveView={setActiveView}
+        onOpenChartModal={() => {
+          setChartModalInitial('flipflops');
+          setIsChartModalOpen(true);
+        }}
+      />
 
       {/* Main View Router */}
       <main className="flex-1">
@@ -63,6 +73,10 @@ export default function App() {
             onOpenCircuit={handleOpenCircuit}
             onWatchVideo={handleWatchVideo}
             onSearchGlobal={handleGlobalSearch}
+            onOpenChartModal={() => {
+              setChartModalInitial('flipflops');
+              setIsChartModalOpen(true);
+            }}
           />
         )}
 
@@ -72,6 +86,11 @@ export default function App() {
             initialSearchQuery={notesSearchQuery}
             onLaunchSimulator={handleOpenCircuit}
             onWatchVideo={handleWatchVideo}
+            onOpenQuiz={uId => {
+              setSelectedQuizUnit(uId);
+              setActiveView('quizzes');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 
@@ -154,6 +173,14 @@ export default function App() {
           </div>
         </footer>
       )}
+
+      {/* Global Engineering Chart Sheets Modal (Flip-Flops & Logic Gates) */}
+      <ChartSheetModal
+        isOpen={isChartModalOpen}
+        onClose={() => setIsChartModalOpen(false)}
+        initialChart={chartModalInitial}
+        onSimulateCircuit={handleOpenCircuit}
+      />
     </div>
   );
 }

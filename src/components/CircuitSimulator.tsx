@@ -3,6 +3,7 @@ import { CircuitDefinition } from '../types/digitalElectronics';
 import { CIRCUITS_DATA } from '../data/deCircuitsData';
 import { LogicGateSymbol, SupportedGate } from './LogicGateSymbol';
 import { BooleanFunctionDisplay } from './BooleanFunctionDisplay';
+import { ChartSheetModal, ChartType } from './ChartSheetModal';
 import {
   Search,
   Zap,
@@ -20,7 +21,8 @@ import {
   X,
   Eye,
   Image as ImageIcon,
-  Minimize2
+  Minimize2,
+  Cpu
 } from 'lucide-react';
 
 interface CircuitSimulatorProps {
@@ -50,6 +52,7 @@ export const CircuitSimulator: React.FC<CircuitSimulatorProps> = ({
   const [activeCircuitId, setActiveCircuitId] = useState<string>(initialCircuitId || CIRCUITS_DATA[0].id);
   const [schematicView, setSchematicView] = useState<'symbol' | 'chart'>('symbol');
   const [isChartModalOpen, setIsChartModalOpen] = useState<boolean>(false);
+  const [activeChartSheet, setActiveChartSheet] = useState<ChartType>('flipflops');
   const [isFocusMode, setIsFocusMode] = useState<boolean>(false);
 
   // Sync activeCircuitId whenever initialCircuitId prop changes
@@ -60,6 +63,17 @@ export const CircuitSimulator: React.FC<CircuitSimulatorProps> = ({
   }, [initialCircuitId]);
 
   const activeCircuit = CIRCUITS_DATA.find(c => c.id === activeCircuitId) || CIRCUITS_DATA[0];
+
+  const isFlipFlopCircuit =
+    activeCircuit.id.includes('flipflop') ||
+    activeCircuit.id.includes('latch') ||
+    activeCircuit.id.includes('counter');
+
+  useEffect(() => {
+    if (isFlipFlopCircuit) {
+      setActiveChartSheet('flipflops');
+    }
+  }, [activeCircuit.id, isFlipFlopCircuit]);
 
   // Map active circuit id to SupportedGate
   const getGateType = (circuitId: string): SupportedGate | null => {
@@ -274,10 +288,13 @@ export const CircuitSimulator: React.FC<CircuitSimulatorProps> = ({
             <button
               onClick={() => setIsChartModalOpen(true)}
               className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors cursor-pointer"
-              title="View Complete Logic Gates Reference Sheet"
+              title="View Engineering Chart Sheets (Flip-Flops & Logic Gates)"
             >
               <ImageIcon className="w-3.5 h-3.5 text-sky-400" />
-              <span className="hidden sm:inline">Official Gates Chart</span>
+              <span className="hidden sm:inline">Engineering Charts</span>
+              <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold rounded">
+                Gates & Flip-Flops
+              </span>
             </button>
 
             <button
@@ -546,21 +563,56 @@ export const CircuitSimulator: React.FC<CircuitSimulatorProps> = ({
                   </div>
                 </>
               ) : (
-                /* Chart Sheet View right in the simulator stage */
-                <div
-                  onClick={() => setIsChartModalOpen(true)}
-                  className="w-full flex flex-col items-center justify-center p-2 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer group"
-                >
-                  <div className="relative max-h-56 overflow-hidden rounded-lg bg-white p-2">
+                /* Chart Sheet View right in the simulator stage with flip-flops and gates selector */
+                <div className="w-full flex flex-col items-center p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  {/* Selector tabs between Flip-Flops Chart and Gates Chart */}
+                  <div className="flex items-center gap-2 mb-3 bg-slate-900 p-1 rounded-lg border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setActiveChartSheet('flipflops')}
+                      className={`px-3 py-1 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                        activeChartSheet === 'flipflops'
+                          ? 'bg-sky-600 text-white shadow-xs'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Cpu className="w-3.5 h-3.5" />
+                      <span>Flip-Flops Chart</span>
+                      <span className="px-1 py-0.2 bg-emerald-400 text-slate-950 text-[9px] font-extrabold rounded">
+                        NEW
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveChartSheet('gates')}
+                      className={`px-3 py-1 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                        activeChartSheet === 'gates'
+                          ? 'bg-sky-600 text-white shadow-xs'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Logic Gates Chart</span>
+                    </button>
+                  </div>
+
+                  <div
+                    onClick={() => setIsChartModalOpen(true)}
+                    className="relative max-h-56 overflow-hidden rounded-lg bg-white p-2 cursor-pointer group shadow-md"
+                    title="Click to enlarge full high-resolution chart"
+                  >
                     <img
-                      src="/logic-gates-chart.jpg"
-                      alt="Official Logic Gates Chart Sheet"
+                      src={activeChartSheet === 'flipflops' ? '/flip-flops-chart.png' : '/logic-gates-chart.jpg'}
+                      alt={activeChartSheet === 'flipflops' ? 'FLIP-FLOP Engineering Chart' : 'Logic Gates Chart Sheet'}
                       className="max-h-52 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
                     />
                   </div>
-                  <span className="text-xs text-sky-400 font-semibold mt-2 flex items-center gap-1 group-hover:text-sky-300">
-                    <Maximize2 className="w-3.5 h-3.5" /> Click to view full resolution sheet
-                  </span>
+                  <button
+                    onClick={() => setIsChartModalOpen(true)}
+                    className="text-xs text-sky-400 hover:text-sky-300 font-semibold mt-2.5 flex items-center gap-1 cursor-pointer"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5" /> Click to enlarge & zoom full reference chart
+                  </button>
                 </div>
               )}
             </div>
@@ -708,64 +760,13 @@ export const CircuitSimulator: React.FC<CircuitSimulatorProps> = ({
         </div>
       </main>
 
-      {/* Full Resolution Modal for Official Logic Gates Chart Sheet */}
-      {isChartModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-300">
-            {/* Modal Header */}
-            <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white">
-                  <Zap className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-sm sm:text-base tracking-tight">
-                    Symbols & Truth Tables of Common Logic Gates
-                  </h3>
-                  <p className="text-xs text-sky-400">Official Course Engineering Reference Sheet</p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setIsChartModalOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Image Content */}
-            <div className="flex-1 overflow-auto p-4 sm:p-6 bg-slate-100 flex items-center justify-center">
-              <img
-                src="/logic-gates-chart.jpg"
-                alt="Symbols & Truth Tables of Common Logic Gates"
-                className="max-h-[70vh] w-auto object-contain rounded-xl shadow-lg border border-slate-300 bg-white"
-              />
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-6 py-3 bg-slate-900 text-slate-400 text-xs flex flex-wrap items-center justify-between gap-3 border-t border-slate-800">
-              <span>Covers: AND, OR, NOT, BUFFER, NAND, NOR, XOR, XNOR</span>
-              <div className="flex items-center gap-2">
-                <a
-                  href="/logic-gates-chart.jpg"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg font-semibold transition-colors"
-                >
-                  Open Original Image in New Tab
-                </a>
-                <button
-                  onClick={() => setIsChartModalOpen(false)}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-semibold transition-colors cursor-pointer"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Full Resolution Modal for Engineering Chart Sheets (Flip-Flops & Logic Gates) */}
+      <ChartSheetModal
+        isOpen={isChartModalOpen}
+        onClose={() => setIsChartModalOpen(false)}
+        initialChart={activeChartSheet}
+        onSimulateCircuit={id => setActiveCircuitId(id)}
+      />
     </div>
   );
 };

@@ -21,19 +21,17 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
 }) => {
   const isSingleInput = gate === 'NOT' || gate === 'BUFFER';
 
-  // Pure clean colors without any effects/glow/animations matching logic gates.jpg
-  // Input A: Red (#ef4444)
-  // Input B: Blue/Cyan (#0ea5e9)
-  // Output Z: Green (#22c55e)
-  // Gate Body: Solid Sky-Cyan (#38bdf8) with solid border (#0284c7)
-  const pinColorA = '#ef4444'; // Red
-  const pinColorB = '#0ea5e9'; // Blue/Cyan
-  const pinColorOut = '#22c55e'; // Green
-
-  // Dynamic wire colors based on logic state (simple solid colors, no glow effects)
-  const wireColorA = inputA === 1 ? '#ef4444' : '#64748b';
-  const wireColorB = inputB === 1 ? '#0ea5e9' : '#64748b';
-  const wireColorOut = output === 1 ? '#22c55e' : '#64748b';
+  // Authentic colors matching logic gates chart:
+  // - Input A wire & pin: Pure Solid Red (#ef4444)
+  // - Input B wire & pin: Pure Solid Blue (#0284c7)
+  // - Output Z wire & pin: Pure Solid Green (#16a34a)
+  // - Gate Body: Solid Sky Blue (#38bdf8) with solid dark blue outline (#0369a1)
+  // - No glow, no shadows, no blur, no fading effects — pure clean flat colors!
+  const colorA = '#ef4444'; // Red
+  const colorB = '#0284c7'; // Blue
+  const colorOut = '#16a34a'; // Green
+  const gateFill = '#38bdf8'; // Solid Sky Blue
+  const gateStroke = '#0369a1'; // Solid Dark Blue Outline
 
   // Render Gate Graphic Body according to standard IEEE/ANSI logic symbols
   const renderGateShape = () => {
@@ -42,9 +40,9 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
         return (
           <path
             d="M 80 30 L 130 30 A 40 40 0 0 1 130 110 L 80 110 Z"
-            fill="#38bdf8"
-            stroke="#0284c7"
-            strokeWidth="4"
+            fill={gateFill}
+            stroke={gateStroke}
+            strokeWidth="3.5"
             strokeLinejoin="round"
           />
         );
@@ -54,9 +52,9 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
           <g>
             <path
               d="M 80 30 L 130 30 A 40 40 0 0 1 130 110 L 80 110 Z"
-              fill="#38bdf8"
-              stroke="#0284c7"
-              strokeWidth="4"
+              fill={gateFill}
+              stroke={gateStroke}
+              strokeWidth="3.5"
               strokeLinejoin="round"
             />
             {/* Inversion Bubble */}
@@ -65,7 +63,7 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
               cy="70"
               r="8"
               fill="#ffffff"
-              stroke="#0284c7"
+              stroke={gateStroke}
               strokeWidth="3.5"
             />
           </g>
@@ -75,9 +73,9 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
         return (
           <path
             d="M 80 30 Q 105 70 80 110 Q 135 105 175 70 Q 135 35 80 30 Z"
-            fill="#38bdf8"
-            stroke="#0284c7"
-            strokeWidth="4"
+            fill={gateFill}
+            stroke={gateStroke}
+            strokeWidth="3.5"
             strokeLinejoin="round"
           />
         );
@@ -87,9 +85,9 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
           <g>
             <path
               d="M 80 30 Q 105 70 80 110 Q 135 105 175 70 Q 135 35 80 30 Z"
-              fill="#38bdf8"
-              stroke="#0284c7"
-              strokeWidth="4"
+              fill={gateFill}
+              stroke={gateStroke}
+              strokeWidth="3.5"
               strokeLinejoin="round"
             />
             {/* Inversion Bubble */}
@@ -98,7 +96,7 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
               cy="70"
               r="8"
               fill="#ffffff"
-              stroke="#0284c7"
+              stroke={gateStroke}
               strokeWidth="3.5"
             />
           </g>
@@ -107,20 +105,20 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
       case 'XOR':
         return (
           <g>
-            {/* Detached Input Curve */}
+            {/* Detached Input Arc */}
             <path
               d="M 68 30 Q 93 70 68 110"
               fill="none"
-              stroke="#0284c7"
-              strokeWidth="4.5"
+              stroke={gateStroke}
+              strokeWidth="4"
               strokeLinecap="round"
             />
             {/* OR Body */}
             <path
               d="M 82 30 Q 107 70 82 110 Q 135 105 175 70 Q 135 35 82 30 Z"
-              fill="#38bdf8"
-              stroke="#0284c7"
-              strokeWidth="4"
+              fill={gateFill}
+              stroke={gateStroke}
+              strokeWidth="3.5"
               strokeLinejoin="round"
             />
           </g>
@@ -129,20 +127,20 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
       case 'XNOR':
         return (
           <g>
-            {/* Detached Input Curve */}
+            {/* Detached Input Arc */}
             <path
               d="M 68 30 Q 93 70 68 110"
               fill="none"
-              stroke="#0284c7"
-              strokeWidth="4.5"
+              stroke={gateStroke}
+              strokeWidth="4"
               strokeLinecap="round"
             />
             {/* OR Body */}
             <path
               d="M 82 30 Q 107 70 82 110 Q 135 105 175 70 Q 135 35 82 30 Z"
-              fill="#38bdf8"
-              stroke="#0284c7"
-              strokeWidth="4"
+              fill={gateFill}
+              stroke={gateStroke}
+              strokeWidth="3.5"
               strokeLinejoin="round"
             />
             {/* Inversion Bubble */}
@@ -151,7 +149,7 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
               cy="70"
               r="8"
               fill="#ffffff"
-              stroke="#0284c7"
+              stroke={gateStroke}
               strokeWidth="3.5"
             />
           </g>
@@ -163,9 +161,9 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             {/* Triangle Body */}
             <polygon
               points="80,30 152,70 80,110"
-              fill="#38bdf8"
-              stroke="#0284c7"
-              strokeWidth="4"
+              fill={gateFill}
+              stroke={gateStroke}
+              strokeWidth="3.5"
               strokeLinejoin="round"
             />
             {/* Inversion Bubble */}
@@ -174,7 +172,7 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
               cy="70"
               r="8"
               fill="#ffffff"
-              stroke="#0284c7"
+              stroke={gateStroke}
               strokeWidth="3.5"
             />
           </g>
@@ -184,9 +182,9 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
         return (
           <polygon
             points="80,30 162,70 80,110"
-            fill="#38bdf8"
-            stroke="#0284c7"
-            strokeWidth="4"
+            fill={gateFill}
+            stroke={gateStroke}
+            strokeWidth="3.5"
             strokeLinejoin="round"
           />
         );
@@ -211,6 +209,7 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
   };
 
   const outputStartX = getOutputStartX();
+  // Standard output label: NOT is Ā, BUFFER is A, all two-input gates are Z
   const outputLabel = gate === 'NOT' ? 'Ā' : (gate === 'BUFFER' ? 'A' : 'Z');
 
   return (
@@ -223,14 +222,14 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
       {/* Inputs Wiring and Terminal Pins */}
       {isSingleInput ? (
         <g>
-          {/* Centered Single Input A line */}
+          {/* Centered Single Input A line (Pure Solid Red) */}
           <line
             x1="40"
             y1="70"
             x2="80"
             y2="70"
-            stroke={wireColorA}
-            strokeWidth="3.5"
+            stroke={colorA}
+            strokeWidth="4"
             strokeLinecap="round"
           />
 
@@ -239,8 +238,8 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             cx="26"
             cy="70"
             r="14"
-            fill={pinColorA}
-            stroke="#b91c1c"
+            fill={colorA}
+            stroke="#991b1b"
             strokeWidth="2"
           />
           <text
@@ -255,29 +254,41 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             A
           </text>
           {showLabels && (
-            <text
-              x="26"
-              y="98"
-              textAnchor="middle"
-              fill={inputA === 1 ? '#ef4444' : '#94a3b8'}
-              fontSize="12"
-              fontWeight="bold"
-              fontFamily="monospace"
-            >
-              {inputA}
-            </text>
+            <g>
+              <rect
+                x="14"
+                y="89"
+                width="24"
+                height="16"
+                rx="4"
+                fill="#1e293b"
+                stroke={colorA}
+                strokeWidth="1.5"
+              />
+              <text
+                x="26"
+                y="101"
+                textAnchor="middle"
+                fill="#ffffff"
+                fontSize="11"
+                fontWeight="bold"
+                fontFamily="monospace"
+              >
+                {inputA}
+              </text>
+            </g>
           )}
         </g>
       ) : (
         <g>
-          {/* Input A Line (Top, y=45) */}
+          {/* Input A Line (Top, y=45) (Pure Solid Red) */}
           <line
             x1="40"
             y1="45"
             x2={gate === 'XOR' || gate === 'XNOR' ? '68' : '80'}
             y2="45"
-            stroke={wireColorA}
-            strokeWidth="3.5"
+            stroke={colorA}
+            strokeWidth="4"
             strokeLinecap="round"
           />
 
@@ -286,8 +297,8 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             cx="26"
             cy="45"
             r="14"
-            fill={pinColorA}
-            stroke="#b91c1c"
+            fill={colorA}
+            stroke="#991b1b"
             strokeWidth="2"
           />
           <text
@@ -302,27 +313,39 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             A
           </text>
           {showLabels && (
-            <text
-              x="26"
-              y="25"
-              textAnchor="middle"
-              fill={inputA === 1 ? '#ef4444' : '#94a3b8'}
-              fontSize="12"
-              fontWeight="bold"
-              fontFamily="monospace"
-            >
-              {inputA}
-            </text>
+            <g>
+              <rect
+                x="14"
+                y="15"
+                width="24"
+                height="16"
+                rx="4"
+                fill="#1e293b"
+                stroke={colorA}
+                strokeWidth="1.5"
+              />
+              <text
+                x="26"
+                y="27"
+                textAnchor="middle"
+                fill="#ffffff"
+                fontSize="11"
+                fontWeight="bold"
+                fontFamily="monospace"
+              >
+                {inputA}
+              </text>
+            </g>
           )}
 
-          {/* Input B Line (Bottom, y=95) */}
+          {/* Input B Line (Bottom, y=95) (Pure Solid Blue) */}
           <line
             x1="40"
             y1="95"
             x2={gate === 'XOR' || gate === 'XNOR' ? '68' : '80'}
             y2="95"
-            stroke={wireColorB}
-            strokeWidth="3.5"
+            stroke={colorB}
+            strokeWidth="4"
             strokeLinecap="round"
           />
 
@@ -331,8 +354,8 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             cx="26"
             cy="95"
             r="14"
-            fill={pinColorB}
-            stroke="#0369a1"
+            fill={colorB}
+            stroke="#075985"
             strokeWidth="2"
           />
           <text
@@ -347,17 +370,29 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
             B
           </text>
           {showLabels && (
-            <text
-              x="26"
-              y="122"
-              textAnchor="middle"
-              fill={inputB === 1 ? '#0ea5e9' : '#94a3b8'}
-              fontSize="12"
-              fontWeight="bold"
-              fontFamily="monospace"
-            >
-              {inputB}
-            </text>
+            <g>
+              <rect
+                x="14"
+                y="113"
+                width="24"
+                height="16"
+                rx="4"
+                fill="#1e293b"
+                stroke={colorB}
+                strokeWidth="1.5"
+              />
+              <text
+                x="26"
+                y="125"
+                textAnchor="middle"
+                fill="#ffffff"
+                fontSize="11"
+                fontWeight="bold"
+                fontFamily="monospace"
+              >
+                {inputB}
+              </text>
+            </g>
           )}
         </g>
       )}
@@ -365,14 +400,14 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
       {/* Logic Gate Body Symbol */}
       {renderGateShape()}
 
-      {/* Output Wire and Terminal Pin */}
+      {/* Output Wire and Terminal Pin (Pure Solid Green) */}
       <g>
         <line
           x1={outputStartX}
           y1="70"
           x2="238"
           y2="70"
-          stroke={wireColorOut}
+          stroke={colorOut}
           strokeWidth="4"
           strokeLinecap="round"
         />
@@ -382,8 +417,8 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
           cx="252"
           cy="70"
           r="14"
-          fill={pinColorOut}
-          stroke="#15803d"
+          fill={colorOut}
+          stroke="#166534"
           strokeWidth="2"
         />
         <text
@@ -398,17 +433,29 @@ export const LogicGateSymbol: React.FC<LogicGateSymbolProps> = ({
           {outputLabel}
         </text>
         {showLabels && (
-          <text
-            x="252"
-            y="98"
-            textAnchor="middle"
-            fill={output === 1 ? '#22c55e' : '#94a3b8'}
-            fontSize="12"
-            fontWeight="bold"
-            fontFamily="monospace"
-          >
-            {output}
-          </text>
+          <g>
+            <rect
+              x="240"
+              y="89"
+              width="24"
+              height="16"
+              rx="4"
+              fill="#1e293b"
+              stroke={colorOut}
+              strokeWidth="1.5"
+            />
+            <text
+              x="252"
+              y="101"
+              textAnchor="middle"
+              fill="#ffffff"
+              fontSize="11"
+              fontWeight="bold"
+              fontFamily="monospace"
+            >
+              {output}
+            </text>
+          </g>
         )}
       </g>
     </svg>

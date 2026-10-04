@@ -19,7 +19,8 @@ import {
   FlaskConical,
   Activity,
   Terminal,
-  ExternalLink
+  ExternalLink,
+  Download
 } from 'lucide-react';
 import { UNIT_OVERVIEWS } from '../data/deNotesData';
 import { ALL_228_VIDEOS } from '../data/deVideosData';
@@ -32,13 +33,15 @@ interface DashboardProps {
   onOpenCircuit: (circuitId: string) => void;
   onWatchVideo: (seqNo: number) => void;
   onSearchGlobal: (query: string) => void;
+  onOpenChartModal?: () => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
   onNavigate,
   onOpenCircuit,
   onWatchVideo,
-  onSearchGlobal
+  onSearchGlobal,
+  onOpenChartModal
 }) => {
   const [localSearch, setLocalSearch] = useState('');
 
@@ -129,12 +132,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
     },
     {
       id: 'quizzes',
-      title: 'Self-Assessment Quizzes',
-      subtitle: 'Automated Scoring & Explanations',
-      description: 'Unit-wise and topic-wise multiple choice questions with instant score calculations, solution rationales, and error breakdowns.',
+      title: 'Chapter Assessment Quizzes',
+      subtitle: '20 Dedicated Questions per Chapter',
+      description: 'Strictly chapter-specific assessments (20 questions per chapter, 100 questions total) with instant score calculation, step-by-step rationales, and past university PYQs.',
       icon: HelpCircle,
-      badgeText: 'Instant Score',
-      actionText: 'Attempt Topic Quiz',
+      badgeText: '20 Qs per Chapter',
+      actionText: 'Attempt Chapter Quiz',
       color: 'bg-emerald-600',
       textColor: 'text-emerald-600',
       borderColor: 'border-emerald-200 hover:border-emerald-500'
@@ -230,27 +233,44 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   ))}
                 </div>
 
-                {/* Direct Link to Provided PDF */}
-                <div className="pt-3 flex flex-wrap items-center gap-3">
+                {/* Direct Link to Provided PDF with exact name requested & Link Manager */}
+                <div className="pt-3 flex flex-wrap items-center gap-2.5">
                   <a
                     href="/digital-electronics-notes-130-pages.pdf"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-950 border border-sky-800 text-sky-300 hover:text-white hover:bg-sky-900 text-xs font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+                    title="Open DIGITAL ELECTRONICS NOTES PDF (130 Pages)"
                   >
-                    <FileText className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Open Provided Notes PDF (130 Pages)</span>
-                    <ExternalLink className="w-3 h-3 ml-0.5 opacity-80" />
+                    <FileText className="w-4 h-4" />
+                    <span>DIGITAL ELECTRONICS NOTES PDF</span>
+                    <ExternalLink className="w-3.5 h-3.5 ml-0.5 opacity-90" />
                   </a>
 
                   <a
                     href="/digital-electronics-notes-130-pages.pdf"
-                    download="digital-electronics-notes-130-pages.pdf"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950 border border-emerald-800 text-emerald-300 hover:text-white hover:bg-emerald-900 text-xs font-semibold transition-colors"
+                    download="DIGITAL_ELECTRONICS_NOTES_130_PAGES.pdf"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+                    title="Download Complete 130-Page Digital Electronics Notes PDF"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <Download className="w-4 h-4 text-emerald-400" />
                     <span>Download PDF</span>
                   </a>
+
+                  {onOpenChartModal && (
+                    <button
+                      type="button"
+                      onClick={onOpenChartModal}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-slate-800 hover:from-emerald-900 hover:to-slate-700 text-emerald-300 border border-emerald-600/40 text-xs font-bold transition-all shadow-xs cursor-pointer"
+                      title="View Official Chart Sheets (Flip-Flops & Logic Gates)"
+                    >
+                      <Layers className="w-4 h-4 text-emerald-400" />
+                      <span>Chart Sheets (Flip-Flops & Gates)</span>
+                      <span className="px-1.5 py-0.2 bg-emerald-400 text-slate-950 text-[9px] font-extrabold rounded">
+                        NEW
+                      </span>
+                    </button>
+                  )}
                 </div>
               </form>
 
@@ -355,6 +375,32 @@ export const Dashboard: React.FC<DashboardProps> = ({
                         }`}
                       />
                     </div>
+                  </div>
+
+                  {/* Boolean Transfer Function Banner */}
+                  <div className="w-full pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] text-sky-400 font-mono font-bold uppercase tracking-wider">
+                        Boolean Transfer Function:
+                      </span>
+                      <span className="text-xs font-mono font-black text-amber-300 bg-slate-950 px-2 py-0.5 rounded border border-amber-500/30">
+                        {demoGate === 'AND' && 'Z = A · B'}
+                        {demoGate === 'OR' && 'Z = A + B'}
+                        {demoGate === 'NOT' && "Z = Ā  (or Z = A')"}
+                        {demoGate === 'BUFFER' && 'Z = A'}
+                        {demoGate === 'NAND' && 'Z = (A · B)̄ = Ā + B̄'}
+                        {demoGate === 'NOR' && 'Z = (A + B)̄ = Ā · B̄'}
+                        {demoGate === 'XOR' && 'Z = A ⊕ B = ĀB + AB̄'}
+                        {demoGate === 'XNOR' && 'Z = (A ⊕ B)̄ = A ⊙ B = AB + ĀB̄'}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => onOpenCircuit(`gate-${demoGate.toLowerCase()}`)}
+                      className="text-[11px] font-bold text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+                    >
+                      Open in Simulator →
+                    </button>
                   </div>
                 </div>
 

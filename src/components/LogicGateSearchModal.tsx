@@ -11,6 +11,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { LogicGateSymbol, SupportedGate } from './LogicGateSymbol';
+import { ChartSheetModal } from './ChartSheetModal';
 
 export const GATE_KEYS = ['AND', 'OR', 'NOT', 'BUFFER', 'NAND', 'NOR', 'XOR', 'XNOR'] as const;
 export type GateKey = typeof GATE_KEYS[number];
@@ -59,7 +60,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
   }> = {
     AND: {
       title: 'AND GATE',
-      expression: 'Z = A . B',
+      expression: 'Z = A · B  (or Z = AB)',
       circuitId: 'gate-and',
       description: 'Output is HIGH (1) only when all inputs are HIGH (1).',
       table: [
@@ -83,7 +84,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
     },
     NOT: {
       title: 'NOT GATE (Inverter)',
-      expression: 'Z = A\' (A-bar)',
+      expression: "Z = Ā  (or Z = A')",
       circuitId: 'gate-not',
       description: 'Inverts input logic: 0 becomes 1, and 1 becomes 0.',
       table: [
@@ -103,7 +104,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
     },
     NAND: {
       title: 'NAND GATE (Universal Gate)',
-      expression: 'Z = (A . B)\'',
+      expression: "Z = (A · B)̄ = Ā + B̄  [or Z = (A · B)']",
       circuitId: 'gate-nand',
       description: 'Inverted AND: Output is LOW (0) only when all inputs are HIGH (1).',
       table: [
@@ -115,7 +116,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
     },
     NOR: {
       title: 'NOR GATE (Universal Gate)',
-      expression: 'Z = (A + B)\'',
+      expression: "Z = (A + B)̄ = Ā · B̄  [or Z = (A + B)']",
       circuitId: 'gate-nor',
       description: 'Inverted OR: Output is HIGH (1) only when all inputs are LOW (0).',
       table: [
@@ -127,7 +128,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
     },
     XOR: {
       title: 'XOR GATE (Exclusive-OR)',
-      expression: 'Z = A ⊕ B = A\'B + AB\'',
+      expression: "Z = A ⊕ B = ĀB + AB̄  [or Z = A'B + AB']",
       circuitId: 'gate-xor',
       description: 'Output is HIGH (1) when inputs are different (odd parity).',
       table: [
@@ -139,7 +140,7 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
     },
     XNOR: {
       title: 'XNOR GATE (Equivalence)',
-      expression: 'Z = (A ⊕ B)\' = AB + A\'B\'',
+      expression: "Z = (A ⊕ B)̄ = A ⊙ B = AB + ĀB̄  [or Z = AB + A'B']",
       description: 'Output is HIGH (1) when both inputs are identical.',
       table: [
         { a: 0, b: 0, out: 1 },
@@ -341,59 +342,13 @@ export const LogicGateSearchCard: React.FC<LogicGateCardProps> = ({
         </div>
       </div>
 
-      {/* FULL SCREEN IMAGE MODAL */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl border border-slate-300">
-            {/* Modal Header */}
-            <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-sky-400" />
-                <span className="font-bold text-sm">
-                  SYMBOLS & TRUTH TABLES OF COMMON LOGIC GATES
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <a
-                  href="/logic-gates-chart.jpg"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs inline-flex items-center gap-1"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Open in Tab</span>
-                </a>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body: Full Image */}
-            <div className="flex-1 overflow-auto p-4 sm:p-6 bg-slate-100 flex items-center justify-center">
-              <img
-                src="/logic-gates-chart.jpg"
-                alt="Symbols and Truth Tables of Common Logic Gates Chart"
-                className="max-h-[75vh] w-auto object-contain rounded-xl shadow-lg border border-slate-300 bg-white p-2"
-              />
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-5 py-3 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
-              <span>Covers all 8 basic gates: AND, OR, NOT, BUFFER, NAND, NOR, XOR, XNOR</span>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Engineering Chart Sheets Modal (Flip-Flops & Logic Gates) */}
+      <ChartSheetModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialChart="gates"
+        onSimulateCircuit={onLaunchSimulator}
+      />
     </div>
   );
 };

@@ -11,15 +11,21 @@ import {
   X,
   Search,
   LayoutDashboard,
-  ExternalLink
+  ExternalLink,
+  Layers
 } from 'lucide-react';
 
 interface NavbarProps {
   activeView: 'dashboard' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books';
   setActiveView: (view: 'dashboard' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books') => void;
+  onOpenChartModal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeView, setActiveView }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  activeView,
+  setActiveView,
+  onOpenChartModal
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -81,18 +87,35 @@ export const Navbar: React.FC<NavbarProps> = ({ activeView, setActiveView }) => 
         </nav>
 
         {/* Right CTA Button */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          {/* DIGITAL ELECTRONICS NOTES PDF Direct Link */}
           <a
             href="/digital-electronics-notes-130-pages.pdf"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-200 bg-sky-950 hover:bg-sky-900 border border-sky-800 rounded-lg transition-colors shadow-xs cursor-pointer whitespace-nowrap"
-            title="Open Provided Course Notes PDF (130 Pages)"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-200 bg-sky-950 hover:bg-sky-900 border border-sky-600/80 rounded-lg transition-colors shadow-xs cursor-pointer whitespace-nowrap"
+            title="Open DIGITAL ELECTRONICS NOTES PDF (130 Pages)"
           >
             <FileText className="w-3.5 h-3.5 text-sky-400" />
-            <span className="hidden sm:inline">Provided Notes PDF</span>
+            <span className="hidden sm:inline">DIGITAL ELECTRONICS NOTES PDF</span>
+            <span className="sm:hidden">NOTES PDF</span>
             <ExternalLink className="w-3 h-3 opacity-80" />
           </a>
+
+          {/* Engineering Chart Sheets Button */}
+          {onOpenChartModal && (
+            <button
+              onClick={onOpenChartModal}
+              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+              title="View Flip-Flops & Logic Gates Chart Sheets"
+            >
+              <Layers className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Chart Sheets</span>
+              <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold rounded">
+                NEW
+              </span>
+            </button>
+          )}
 
           <button
             onClick={() => setActiveView('notes')}
