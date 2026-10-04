@@ -9,9 +9,10 @@ import { QuizModule } from './components/QuizModule';
 import { PyqModule } from './components/PyqModule';
 import { ReferenceBooksModule } from './components/ReferenceBooksModule';
 import { ChartSheetModal, ChartType } from './components/ChartSheetModal';
+import { HandWrittenNotesViewer } from './components/HandWrittenNotesViewer';
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'dashboard' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books'>('dashboard');
+  const [activeView, setActiveView] = useState<'dashboard' | 'handwritten' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books'>('dashboard');
   const [selectedCircuitId, setSelectedCircuitId] = useState<string>('gate-and');
   const [selectedNotesSectionId, setSelectedNotesSectionId] = useState<string>('sec-u1-1');
   const [notesSearchQuery, setNotesSearchQuery] = useState<string>('');
@@ -80,12 +81,20 @@ export default function App() {
           />
         )}
 
+        {activeView === 'handwritten' && (
+          <HandWrittenNotesViewer onNavigateToSimulator={handleOpenCircuit} />
+        )}
+
         {activeView === 'notes' && (
           <PdfNotesViewer
             initialSectionId={selectedNotesSectionId}
             initialSearchQuery={notesSearchQuery}
             onLaunchSimulator={handleOpenCircuit}
             onWatchVideo={handleWatchVideo}
+            onOpenHandwritten={() => {
+              setActiveView('handwritten');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             onOpenQuiz={uId => {
               setSelectedQuizUnit(uId);
               setActiveView('quizzes');
@@ -163,6 +172,7 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap items-center gap-5 text-slate-300 font-medium">
+              <button onClick={() => { setActiveView('handwritten'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-amber-400 hover:text-amber-300 font-bold cursor-pointer">HandWritten Notes</button>
               <button onClick={() => { setActiveView('notes'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white cursor-pointer">PDF Notes</button>
               <button onClick={() => { setActiveView('simulator'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white cursor-pointer">Circuit Simulator</button>
               <button onClick={() => { setActiveView('videos'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white cursor-pointer">228 Videos</button>

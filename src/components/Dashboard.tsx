@@ -20,7 +20,8 @@ import {
   Activity,
   Terminal,
   ExternalLink,
-  Download
+  Download,
+  PenTool
 } from 'lucide-react';
 import { UNIT_OVERVIEWS } from '../data/deNotesData';
 import { ALL_228_VIDEOS } from '../data/deVideosData';
@@ -29,7 +30,7 @@ import { LogicGateSearchCard, isGateSearchQuery } from './LogicGateSearchModal';
 import { LogicGateSymbol, SupportedGate } from './LogicGateSymbol';
 
 interface DashboardProps {
-  onNavigate: (destination: 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books') => void;
+  onNavigate: (destination: 'notes' | 'handwritten' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books') => void;
   onOpenCircuit: (circuitId: string) => void;
   onWatchVideo: (seqNo: number) => void;
   onSearchGlobal: (query: string) => void;
@@ -94,6 +95,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
   ];
 
   const modules = [
+    {
+      id: 'handwritten',
+      title: 'HandWritten Notes',
+      subtitle: 'All 5 Units · Student Notebook',
+      description: 'CamScanner-verified handwritten classroom notes covering Units 1 to 5. Includes derivations, truth tables, K-map minimizations, Quine-McCluskey method, TTL/CMOS circuits, and PLDs.',
+      icon: PenTool,
+      badgeText: 'Handwritten Notes',
+      actionText: 'Explore HandWritten Notes',
+      color: 'bg-amber-500',
+      textColor: 'text-amber-600',
+      borderColor: 'border-amber-300 hover:border-amber-500'
+    },
     {
       id: 'notes',
       title: 'PDF Notes & Reader',
@@ -233,28 +246,53 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   ))}
                 </div>
 
-                {/* Direct Link to Provided PDF with exact name requested & Link Manager */}
+                {/* Direct Links to HandWritten Notes & Course Notes PDF */}
                 <div className="pt-3 flex flex-wrap items-center gap-2.5">
+                  {/* Primary: HandWritten Notes with exact name requested */}
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('handwritten')}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition-all shadow-md cursor-pointer"
+                      title="Explore HandWritten Notes in Notebook Viewer"
+                    >
+                      <PenTool className="w-4 h-4 text-slate-950" />
+                      <span>HandWritten Notes</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+
+                    <a
+                      href="/HandWritten-Notes.pdf"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-amber-950 hover:bg-amber-900 text-amber-200 border border-amber-600/60 text-xs font-bold transition-colors cursor-pointer"
+                      title="Open HandWritten Notes PDF in a new tab"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Open PDF</span>
+                    </a>
+
+                    <a
+                      href="/HandWritten-Notes.pdf"
+                      download="HandWritten_Notes_Digital_Electronics.pdf"
+                      className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+                      title="Download HandWritten Notes PDF"
+                    >
+                      <Download className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="hidden sm:inline">Download</span>
+                    </a>
+                  </div>
+
                   <a
                     href="/digital-electronics-notes-130-pages.pdf"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
-                    title="Open DIGITAL ELECTRONICS NOTES PDF (130 Pages)"
+                    className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-sky-950 hover:bg-sky-900 border border-sky-600/80 text-sky-200 text-xs font-bold transition-all shadow-xs cursor-pointer"
+                    title="Open 130-Page Course Notes PDF"
                   >
-                    <FileText className="w-4 h-4" />
-                    <span>DIGITAL ELECTRONICS NOTES PDF</span>
-                    <ExternalLink className="w-3.5 h-3.5 ml-0.5 opacity-90" />
-                  </a>
-
-                  <a
-                    href="/digital-electronics-notes-130-pages.pdf"
-                    download="DIGITAL_ELECTRONICS_NOTES_130_PAGES.pdf"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
-                    title="Download Complete 130-Page Digital Electronics Notes PDF"
-                  >
-                    <Download className="w-4 h-4 text-emerald-400" />
-                    <span>Download PDF</span>
+                    <FileText className="w-3.5 h-3.5 text-sky-400" />
+                    <span>Course Notes PDF</span>
+                    <ExternalLink className="w-3 h-3 opacity-80" />
                   </a>
 
                   {onOpenChartModal && (
@@ -265,7 +303,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       title="View Official Chart Sheets (Flip-Flops & Logic Gates)"
                     >
                       <Layers className="w-4 h-4 text-emerald-400" />
-                      <span>Chart Sheets (Flip-Flops & Gates)</span>
+                      <span>Chart Sheets</span>
                       <span className="px-1.5 py-0.2 bg-emerald-400 text-slate-950 text-[9px] font-extrabold rounded">
                         NEW
                       </span>

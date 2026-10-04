@@ -26,7 +26,8 @@ import {
   ArrowRight,
   ExternalLink,
   Zap,
-  HelpCircle
+  HelpCircle,
+  PenTool
 } from 'lucide-react';
 
 interface PdfNotesViewerProps {
@@ -35,6 +36,7 @@ interface PdfNotesViewerProps {
   onLaunchSimulator?: (circuitId: string) => void;
   onWatchVideo?: (videoSeq: number) => void;
   onOpenQuiz?: (unitId: UnitId) => void;
+  onOpenHandwritten?: () => void;
 }
 
 export const PdfNotesViewer: React.FC<PdfNotesViewerProps> = ({
@@ -42,7 +44,8 @@ export const PdfNotesViewer: React.FC<PdfNotesViewerProps> = ({
   initialSearchQuery = '',
   onLaunchSimulator,
   onWatchVideo,
-  onOpenQuiz
+  onOpenQuiz,
+  onOpenHandwritten
 }) => {
   const [activeSectionId, setActiveSectionId] = useState<string>(initialSectionId || NOTE_SECTIONS[0].id);
   const [searchQuery, setSearchQuery] = useState<string>(initialSearchQuery);
@@ -213,8 +216,21 @@ export const PdfNotesViewer: React.FC<PdfNotesViewerProps> = ({
 
             <div className="h-5 w-[1px] bg-slate-700 hidden sm:block" />
 
-            {/* Provided Course Notes PDF Link & Manager */}
+            {/* Provided Course Notes PDF Link & HandWritten Notes */}
             <div className="flex items-center gap-1.5">
+              {onOpenHandwritten && (
+                <button
+                  type="button"
+                  onClick={onOpenHandwritten}
+                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+                  title="Switch to HandWritten Notes Viewer"
+                >
+                  <PenTool className="w-3.5 h-3.5 text-slate-950" />
+                  <span className="hidden sm:inline">HandWritten Notes</span>
+                  <span className="sm:hidden">HandWritten</span>
+                </button>
+              )}
+
               <a
                 href="/digital-electronics-notes-130-pages.pdf"
                 target="_blank"
@@ -223,8 +239,8 @@ export const PdfNotesViewer: React.FC<PdfNotesViewerProps> = ({
                 title="Open DIGITAL ELECTRONICS NOTES PDF in a new tab"
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">DIGITAL ELECTRONICS NOTES PDF</span>
-                <span className="sm:hidden">NOTES PDF</span>
+                <span className="hidden sm:inline">Course Notes PDF</span>
+                <span className="sm:hidden">Course PDF</span>
                 <ExternalLink className="w-3 h-3 opacity-80" />
               </a>
 

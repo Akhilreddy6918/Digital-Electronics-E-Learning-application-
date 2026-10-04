@@ -12,12 +12,13 @@ import {
   Search,
   LayoutDashboard,
   ExternalLink,
-  Layers
+  Layers,
+  PenTool
 } from 'lucide-react';
 
 interface NavbarProps {
-  activeView: 'dashboard' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books';
-  setActiveView: (view: 'dashboard' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books') => void;
+  activeView: 'dashboard' | 'handwritten' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books';
+  setActiveView: (view: 'dashboard' | 'handwritten' | 'notes' | 'videos' | 'quizzes' | 'simulator' | 'pyq' | 'books') => void;
   onOpenChartModal?: () => void;
 }
 
@@ -30,7 +31,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
-    { id: 'notes', label: 'PDF Notes', icon: FileText, highlight: true },
+    { id: 'handwritten', label: 'HandWritten Notes', icon: PenTool, highlight: true },
+    { id: 'notes', label: 'PDF Notes', icon: FileText },
     { id: 'simulator', label: 'Circuit Simulator', icon: Zap },
     { id: 'videos', label: '228 Videos', icon: Video },
     { id: 'quizzes', label: 'Quizzes', icon: HelpCircle },
@@ -88,17 +90,30 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right CTA Button */}
         <div className="flex items-center gap-2">
+          {/* HandWritten Notes PDF Direct Link */}
+          <a
+            href="/HandWritten-Notes.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-amber-200 bg-amber-950 hover:bg-amber-900 border border-amber-600/80 rounded-lg transition-colors shadow-xs cursor-pointer whitespace-nowrap"
+            title="Open HandWritten Notes PDF (Units 1 - 5)"
+          >
+            <PenTool className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">HandWritten Notes</span>
+            <span className="sm:hidden">HandWritten</span>
+            <ExternalLink className="w-3 h-3 opacity-80" />
+          </a>
+
           {/* DIGITAL ELECTRONICS NOTES PDF Direct Link */}
           <a
             href="/digital-electronics-notes-130-pages.pdf"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-200 bg-sky-950 hover:bg-sky-900 border border-sky-600/80 rounded-lg transition-colors shadow-xs cursor-pointer whitespace-nowrap"
-            title="Open DIGITAL ELECTRONICS NOTES PDF (130 Pages)"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-200 bg-sky-950 hover:bg-sky-900 border border-sky-600/80 rounded-lg transition-colors shadow-xs cursor-pointer whitespace-nowrap"
+            title="Open 130-Page Digital Electronics Notes PDF"
           >
             <FileText className="w-3.5 h-3.5 text-sky-400" />
-            <span className="hidden sm:inline">DIGITAL ELECTRONICS NOTES PDF</span>
-            <span className="sm:hidden">NOTES PDF</span>
+            <span>Course Notes PDF</span>
             <ExternalLink className="w-3 h-3 opacity-80" />
           </a>
 
